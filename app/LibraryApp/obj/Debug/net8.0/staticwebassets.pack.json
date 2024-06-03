@@ -1,0 +1,41 @@
+{
+  "Files": [
+    {
+      "Id": "/Users/gimlig/Developer/BazyDanych/Biblioteka/app/LibraryApp/obj/Debug/net8.0/scopedcss/projectbundle/LibraryApp.bundle.scp.css",
+      "PackagePath": "staticwebassets/LibraryApp.bundle.scp.css"
+    },
+    {
+      "Id": "/Users/gimlig/Developer/BazyDanych/Biblioteka/app/LibraryApp/wwwroot/app.css",
+      "PackagePath": "staticwebassets/app.css"
+    },
+    {
+      "Id": "/Users/gimlig/Developer/BazyDanych/Biblioteka/app/LibraryApp/wwwroot/bootstrap/bootstrap.min.css",
+      "PackagePath": "staticwebassets/bootstrap/bootstrap.min.css"
+    },
+    {
+      "Id": "/Users/gimlig/Developer/BazyDanych/Biblioteka/app/LibraryApp/wwwroot/bootstrap/bootstrap.min.css.map",
+      "PackagePath": "staticwebassets/bootstrap/bootstrap.min.css.map"
+    },
+    {
+      "Id": "/Users/gimlig/Developer/BazyDanych/Biblioteka/app/LibraryApp/wwwroot/favicon.png",
+      "PackagePath": "staticwebassets/favicon.png"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.LibraryApp.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.build.LibraryApp.props",
+      "PackagePath": "build\\LibraryApp.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.buildMultiTargeting.LibraryApp.props",
+      "PackagePath": "buildMultiTargeting\\LibraryApp.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.buildTransitive.LibraryApp.props",
+      "PackagePath": "buildTransitive\\LibraryApp.props"
+    }
+  ],
+  "ElementsToRemove": []
+}
