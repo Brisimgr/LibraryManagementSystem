@@ -1,0 +1,53 @@
+﻿@page "/books"
+@using LibraryApp.Models
+@inject IBookService BookService
+
+<PageTitle>Books</PageTitle>
+
+<h3>Books</h3>
+
+@if (bookDetails == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Genre</th>
+                <th>Pages</th>
+                <th>Publish Year</th>
+                <th>Availability</th>
+                <th>Branch</th>
+                <th>Branch Address</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var book in bookDetails)
+            {
+                <tr>
+                    <td>@book.Title</td>
+                    <td>@book.Author</td>
+                    <td>@book.Genre</td>
+                    <td>@book.Pages</td>
+                    <td>@book.PublishYear</td>
+                    <td>@book.Availability</td>
+                    <td>@book.Branch</td>
+                    <td>@book.BranchAddress</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<BookDetail> bookDetails;
+
+    protected override async Task OnInitializedAsync()
+    {
+        bookDetails = await BookService.GetBookDetailsAsync();
+    }
+}
