@@ -4,6 +4,7 @@ using LibraryApp.Data;
 using LibraryApp.Services;
 using Microsoft.EntityFrameworkCore;
 using LibraryApp;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,16 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+       .AddCookie(options => {
+            options.AccessDeniedPath = "/access-denied";
+            options.Cookie.Name = "auth_token";
+            options.LoginPath = "/login";
+            options.Cookie.MaxAge = TimeSpan.FromMinutes(30);
+       });  
+builder.Services.AddAuthorization();
+builder.Services.AddCascadingAuthenticationState();  
+
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<LibraryDbContext>(options => {
@@ -20,6 +31,7 @@ builder.Services.AddDbContext<LibraryDbContext>(options => {
 });
 
 builder.Services.AddScoped<IBookService, BookService>();
+builder.Services.AddScoped<IBorrowedService, BorrowedService>();
 
 var app = builder.Build();
 
@@ -36,6 +48,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 app.UseAntiforgery();
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapRazorPages();

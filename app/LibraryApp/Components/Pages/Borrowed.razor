@@ -1,0 +1,52 @@
+﻿@page "/borrowed"
+@using LibraryApp.Models
+@using Microsoft.AspNetCore.Authorization
+@inject Services.IBorrowedService BorrowedService
+@attribute [StreamRendering]
+@attribute [Authorize(Roles = "admin")]
+
+<PageTitle>Borrowed</PageTitle>
+
+<h3>Borrowed</h3>
+
+@if (borrowedDetails == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Book</th>
+                <th>Borrow Date</th>
+                <th>Planned Return Date</th>
+                <th>Return Date</th>
+                <th>Charge</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var borrowed in borrowedDetails)
+            {
+                <tr>
+                    <td>@borrowed.User</td>
+                    <td>@borrowed.Book</td>
+                    <td>@borrowed.BorrowDate</td>
+                    <td>@borrowed.PlannedReturnDate</td>
+                    <td>@borrowed.ReturnDate</td>
+                    <td>@borrowed.Charge</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<BorrowedDetail> borrowedDetails;
+
+    protected override async Task OnInitializedAsync()
+    {
+        borrowedDetails = await BorrowedService.GetBorrowedDetailsAsync();
+    }
+}

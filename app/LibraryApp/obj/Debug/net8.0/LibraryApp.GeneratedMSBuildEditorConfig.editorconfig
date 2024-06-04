@@ -22,8 +22,28 @@ build_property._RazorSourceGeneratorDebug =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9BcHAucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Users/gimlig/Developer/BazyDanych/Biblioteka/app/LibraryApp/Components/Pages/Account/AccessDenied.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9BY2NvdW50L0FjY2Vzc0RlbmllZC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/gimlig/Developer/BazyDanych/Biblioteka/app/LibraryApp/Components/Pages/Account/Login.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9BY2NvdW50L0xvZ2luLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/gimlig/Developer/BazyDanych/Biblioteka/app/LibraryApp/Components/Pages/Account/Logout.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9BY2NvdW50L0xvZ291dC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/gimlig/Developer/BazyDanych/Biblioteka/app/LibraryApp/Components/Pages/Account/Register.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9BY2NvdW50L1JlZ2lzdGVyLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Users/gimlig/Developer/BazyDanych/Biblioteka/app/LibraryApp/Components/Pages/Books.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9Cb29rcy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/gimlig/Developer/BazyDanych/Biblioteka/app/LibraryApp/Components/Pages/Borrowed.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9Cb3Jyb3dlZC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/gimlig/Developer/BazyDanych/Biblioteka/app/LibraryApp/Components/Pages/CRUD/Buttons/CreateBookButton.razor]

@@ -1,6 +1,6 @@
 ﻿using LibraryApp.Models;
 
-namespace LibraryApp;
+namespace LibraryApp.Services;
 
 public interface IBookService
 {

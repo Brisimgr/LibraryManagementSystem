@@ -1,0 +1,73 @@
+﻿@page "/register"
+
+@using LibraryApp.Data
+@using LibraryApp.Models
+@using LibraryApp.Models.ViewModels
+@inject LibraryDbContext LibraryDbContext
+@inject NavigationManager NavigationManager
+
+<div class="row">
+    <div class="col-lg-4 offset-lg-4 pt-4 pb-4 border">
+        <EditForm Model="@Model" OnValidSubmit="RegisterUser" FormName="RegisterForm">
+            <DataAnnotationsValidator />
+            <div class="mb-3 text-center flex-column">
+                <h3>REGISTER</h3>
+            </div>
+            <div class="mb-3">
+                <label>User Login</label>
+                <InputText @bind-Value="Model.Login" class="form-control" placeholder="Username" />
+                <ValidationMessage For="() => Model.Login" />
+            </div>
+            <div class="mb-3">
+                <label>Email</label>
+                <InputText @bind-Value="Model.Mail" class="form-control" placeholder="Email" />
+                <ValidationMessage For="() => Model.Mail" />
+            </div>
+            <div class="mb-3">
+                <label>Password</label>
+                <InputText @bind-Value="Model.PasswordHash" class="form-control" placeholder="Password" type="password" />
+                <ValidationMessage For="() => Model.PasswordHash" />
+            </div>
+            <div class="mb-3">
+                <label>Confirm Password</label>
+                <InputText @bind-Value="Model.ConfirmPassword" class="form-control" placeholder="Confirm Password" type="password" />
+                <ValidationMessage For="() => Model.ConfirmPassword" />
+            </div>
+            <div class="mb-3 text-center">
+                <span class="text-danger">@errorMessage</span>
+            </div>
+            <div class="mb-3 d-grid gap-2">
+                <button type="submit" class="btn btn-primary">Register</button>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    [SupplyParameterFromForm]
+    public RegisterViewModel Model { get; set; } = new();
+
+    private string? errorMessage;
+
+    private async Task RegisterUser()
+    {
+        var userAccount = LibraryDbContext.Users.FirstOrDefault(x => x.Login == Model.Login || x.Mail == Model.Mail);
+        if (userAccount != null)
+        {
+            errorMessage = "User with the same Login or Email already exists.";
+            return;
+        }
+
+        var newUser = new User
+        {
+            Login = Model.Login,
+            Mail = Model.Mail,
+            PasswordHash = Model.PasswordHash, // Here you should hash the password before saving
+        };
+
+        LibraryDbContext.Users.Add(newUser);
+        await LibraryDbContext.SaveChangesAsync();
+
+        NavigationManager.NavigateTo("/login");
+    }
+}
