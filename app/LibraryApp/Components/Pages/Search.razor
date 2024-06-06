@@ -1,0 +1,128 @@
+﻿@page "/search-books"
+@using LibraryApp.Services
+@using LibraryApp.Models
+@inject IBookService BookService
+@inject IGenresService GenresService
+@rendermode InteractiveServer
+
+<h3>Book Search</h3>
+
+
+
+<div>
+    <label for="searchType">Search By:</label>
+    <select id="searchType" @bind="SearchType">
+        <option value="Title">Title</option>
+        <option value="Author">Author</option>
+        <option value="Genre">Genre</option>
+    </select>
+</div>
+
+<div>
+    @if (SearchType == "Genre")
+    {
+        <label for="searchTerm">Select Genre:</label>
+        <select id="searchTerm" @bind="SelectedGenreId">
+            @foreach (var genre in Genres)
+            {
+                <option value="@genre.GenreId">@genre.Name</option>
+            }
+        </select>
+    }
+    else
+    {
+        <label for="searchTerm">Search Term:</label>
+        <input id="searchTerm" type="text" @bind="SearchTerm" />
+    }
+</div>
+
+<button @onclick="SearchBooksButton">Search</button>
+
+@if (SearchResults != null && SearchResults.Count > 0)
+{
+    <h3>Search Results</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Genre</th>
+                <th>Pages</th>
+                <th>Publish Year</th>
+                <th>Availability</th>
+                <th>Branch</th>
+                <th>Branch Address</th>
+                <AuthorizeView Roles="user">
+                    <Authorized>
+                        <th>Borrow</th>
+                    </Authorized>
+                </AuthorizeView>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var book in SearchResults)
+            {
+                <tr>
+                    <td>@book.Title</td>
+                    <td>@book.Author</td>
+                    <td>@book.Genre</td>
+                    <td>@book.Pages</td>
+                    <td>@book.PublishYear</td>
+                    <td>@book.Availability</td>
+                    <td>@book.Branch</td>
+                    <td>@book.BranchAddress</td>
+                    <AuthorizeView Roles="user">
+                        <Authorized>
+                            <td>
+                                <button @onclick="() => BorrowBook(book.BookId)"
+                                        disabled="@(!IsBookAvailable(book))">Borrow</button>
+                            </td>
+                        </Authorized>
+                    </AuthorizeView>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else if (SearchResults != null)
+{
+    <p>No results found</p>
+}
+
+@code {
+    private string SearchType = "Genre";
+    private string SearchTerm = string.Empty;
+    private int SelectedGenreId;
+    private List<Genre> Genres = new List<Genre>();
+    private List<BookDetail> SearchResults;
+    protected override async Task OnInitializedAsync()
+    {
+        Console.WriteLine("Here");
+        Genres = await GenresService.GetGenresAsync();
+    }
+
+    private async Task SearchBooksButton()
+    {
+        Console.WriteLine("Search button clicked."); // Check if the button click event is being triggered
+        if (SearchType == "Genre")
+        {
+            var selectedGenre = Genres.FirstOrDefault(g => g.GenreId == SelectedGenreId)?.Name;
+            if (!string.IsNullOrEmpty(selectedGenre))
+            {
+                SearchResults = await BookService.SearchBooksAsync("Genre", selectedGenre);
+            }
+        }
+        else
+        {
+            SearchResults = await BookService.SearchBooksAsync(SearchType.ToLower(), SearchTerm);
+        }
+    }
+
+    private async Task BorrowBook(int id) {
+
+    }
+
+    private bool IsBookAvailable(BookDetail book) {
+        return book.Availability != "not available";
+    }
+}

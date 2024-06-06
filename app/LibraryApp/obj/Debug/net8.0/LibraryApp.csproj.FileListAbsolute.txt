@@ -102,3 +102,5 @@
 /Users/gimlig/Developer/BazyDanych/Biblioteka/app/LibraryApp/bin/Debug/net8.0/zh-Hant/Microsoft.CodeAnalysis.Workspaces.resources.dll
 /Users/gimlig/Developer/BazyDanych/Biblioteka/app/LibraryApp/obj/Debug/net8.0/LibraryApp.csproj.AssemblyReference.cache
 /Users/gimlig/Developer/BazyDanych/Biblioteka/app/LibraryApp/obj/Debug/net8.0/LibraryApp.csproj.Up2Date
+/Users/gimlig/Developer/BazyDanych/Biblioteka/app/LibraryApp/bin/Debug/net8.0/Radzen.Blazor.dll
+/Users/gimlig/Developer/BazyDanych/Biblioteka/app/LibraryApp/bin/Debug/net8.0/System.Linq.Dynamic.Core.dll

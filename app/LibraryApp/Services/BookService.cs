@@ -1,6 +1,10 @@
 ﻿using LibraryApp.Data;
 using LibraryApp.Models;
 using Microsoft.EntityFrameworkCore;
+using MySqlConnector;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
 
 namespace LibraryApp.Services;
 
@@ -18,5 +22,13 @@ public class BookService : IBookService
         return await _context.BookDetails.ToListAsync();
     }
 
-     
+    public async Task<List<BookDetail>> SearchBooksAsync(string searchOption, string searchCrit)
+    {
+        var searchOptionParam = new MySqlParameter("@search_option", searchOption);
+        var searchCritParam = new MySqlParameter("@search_crit", searchCrit);
+
+        return await _context.BookDetails
+                             .FromSqlRaw("CALL find_books(@search_option, @search_crit)", searchOptionParam, searchCritParam)
+                             .ToListAsync();
+    }
 }

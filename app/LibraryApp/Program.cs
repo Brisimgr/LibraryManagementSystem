@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-builder.Services.AddServerSideBlazor();
+
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
@@ -32,6 +32,7 @@ builder.Services.AddDbContext<LibraryDbContext>(options => {
 
 builder.Services.AddScoped<IBookService, BookService>();
 builder.Services.AddScoped<IBorrowedService, BorrowedService>();
+builder.Services.AddScoped<IGenresService, GenresService>();
 
 var app = builder.Build();
 
@@ -46,13 +47,10 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
-app.UseRouting();
 app.UseAntiforgery();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapRazorPages();
-app.MapBlazorHub();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 

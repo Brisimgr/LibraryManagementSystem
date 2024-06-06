@@ -1,6 +1,14 @@
--- USE libraryDB;
+USE libraryDB;
+
+UPDATE books
+SET books.genre_id = 5
+WHERE books.author_id = 12;
 
 SELECT * FROM book_details;
+
+-- SELECT * FROM genres;
+
+-- SELECT * FROM book_details;
 
 -- SELECT * FROM borrowed_details;
 
@@ -21,3 +29,5 @@ SELECT * FROM book_details;
 -- WHERE borrowed_id = 1;
 
 -- CALL find_books('author', 'D');
+
+
