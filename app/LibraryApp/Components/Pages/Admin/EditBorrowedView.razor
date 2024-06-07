@@ -1,0 +1,81 @@
+﻿@page "/edit-borrowed/{borrowedId:int}"
+@using LibraryApp.Models
+@using LibraryApp.Services
+@using Microsoft.AspNetCore.Authorization
+@using LibraryApp.Models.ViewModels
+@inject IBorrowedService BorrowedService
+@inject NavigationManager NavigationManager
+@attribute [Authorize(Roles = "admin")]
+@rendermode InteractiveServer
+
+<h3>Edit Borrowed Entry</h3>
+@if (borrowedDetail != null) {
+    <div>
+        <p><strong>User: </strong>@borrowedDetail.User</p>
+        <p><strong>Book: </strong>@borrowedDetail.Book</p>
+        <EditForm Model="@Model" OnValidSubmit="HandleValidSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <div class="mb-3">
+                <label for="borrowDate" class="form-label">Borrow Date</label>
+                <input id="borrowDate" type="date" class="form-control" @bind="Model.BorrowDate" />
+            </div>
+
+            <div class="mb-3">
+                <label for="plannedReturnDate" class="form-label">Planned Return Date</label>
+                <input id="plannedReturnDate" type="date" class="form-control" @bind="Model.PlannedReturnDate" />
+            </div>
+
+            <div class="mb-3">
+                <label for="returnDate" class="form-label">Return Date</label>
+                <input id="returnDate" type="date" class="form-control" @bind="Model.ReturnDate" />
+            </div>
+
+            <div class="mb-3">
+                <label for="charge" class="form-label">Charge</label>
+                <input id="charge" type="number" class="form-control" @bind="Model.Charge" />
+            </div>
+
+            <button type="submit" class="btn btn-primary">Save</button>
+        </EditForm>
+    </div>
+}
+else {
+    <p>Borrowed entry not found.</p>
+}
+
+@code {
+    [Parameter]
+    public int BorrowedId { get; set; }
+
+    [SupplyParameterFromForm]
+    private EditBorrowedModel Model { get; set; } = new();
+    private BorrowedDetail? borrowedDetail;
+    private Borrowed? borrowed;
+    protected override async Task OnInitializedAsync() {
+        borrowedDetail = await BorrowedService.GetBorrowedDetailByIdAsync(BorrowedId);
+        borrowed = await BorrowedService.GetBorrowedByIdAsync(BorrowedId);
+
+        if(borrowed != null) {
+            Model.BorrowDate = borrowed.BorrowDate;
+            Model.PlannedReturnDate = borrowed.PlannedReturnDate;
+            Model.ReturnDate = borrowed.ReturnDate;
+            Model.Charge = borrowed.Charge;
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        if (Model != null)
+        {
+            borrowed!.BorrowDate = Model.BorrowDate;
+            borrowed.PlannedReturnDate = Model.PlannedReturnDate;
+            borrowed.ReturnDate = Model.ReturnDate;
+            borrowed.Charge = Model.Charge;
+            
+            await BorrowedService.UpdateBorrowedAsync(borrowed);
+            NavigationManager.NavigateTo("/borrowed");
+        }
+    }
+}

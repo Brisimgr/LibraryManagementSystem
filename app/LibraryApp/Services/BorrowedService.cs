@@ -29,4 +29,23 @@ public class BorrowedService : IBorrowedService
     {
         return await _context.BorrowedDetails.ToListAsync();
     }
+
+    public Task<BorrowedDetail> GetBorrowedDetailByIdAsync(int id)
+    {
+        return _context.BorrowedDetails.FirstOrDefaultAsync(b => b.BorrowedId == id);
+    }
+
+    public Task<Borrowed> GetBorrowedByIdAsync(int id)
+    {
+       return _context.Borroweds
+                      .Include(b => b.User)
+                      .Include(b => b.Book)
+                      .FirstOrDefaultAsync(b => b.BorrowedId == id);
+    }
+
+    public async Task UpdateBorrowedAsync(Borrowed borrowedEntry)
+    {
+        _context.Borroweds.Update(borrowedEntry);
+        await _context.SaveChangesAsync();
+    }
 }

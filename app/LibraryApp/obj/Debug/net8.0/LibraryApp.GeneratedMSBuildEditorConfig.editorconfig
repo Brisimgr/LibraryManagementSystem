@@ -46,16 +46,16 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9BZG1pbi9Cb3Jyb3dlZFZpZXcucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Users/gimlig/Developer/BazyDanych/Biblioteka/app/LibraryApp/Components/Pages/Admin/EditBorrowedView.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9BZG1pbi9FZGl0Qm9ycm93ZWRWaWV3LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/gimlig/Developer/BazyDanych/Biblioteka/app/LibraryApp/Components/Pages/Admin/Users.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9BZG1pbi9Vc2Vycy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Users/gimlig/Developer/BazyDanych/Biblioteka/app/LibraryApp/Components/Pages/Books.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9Cb29rcy5yYXpvcg==
-build_metadata.AdditionalFiles.CssScope = 
-
-[/Users/gimlig/Developer/BazyDanych/Biblioteka/app/LibraryApp/Components/Pages/CRUD/Buttons/CreateBookButton.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9DUlVEL0J1dHRvbnMvQ3JlYXRlQm9va0J1dHRvbi5yYXpvcg==
-build_metadata.AdditionalFiles.CssScope = 
-
-[/Users/gimlig/Developer/BazyDanych/Biblioteka/app/LibraryApp/Components/Pages/CRUD/CreateBook.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9DUlVEL0NyZWF0ZUJvb2sucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/gimlig/Developer/BazyDanych/Biblioteka/app/LibraryApp/Components/Pages/Error.razor]

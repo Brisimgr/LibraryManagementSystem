@@ -22,10 +22,24 @@ public class UserService : IUserService
         return await _context.Users.AsNoTracking().SingleOrDefaultAsync(u => u.UserId == userId);
     }
 
-    public Task<List<User>> GetAllUsersAsync()
+    public async Task<List<User>> GetAllUsersAsync()
     {
-        return _context.Users
+        return await _context.Users
                        .Where(u => u.UserRole != "admin")
                        .ToListAsync();
+    }
+
+    public async Task<int> GetCurrentlyBorrowedAsync(int userId)
+    {
+        return await _context.Borroweds
+                             .Where(b => b.UserId == userId && b.ReturnDate == null)
+                             .CountAsync();
+    }
+
+    public async Task<int> GetReturnedAsync(int userId)
+    {
+        return await _context.Borroweds
+                             .Where(b => b.UserId == userId && b.ReturnDate != null)
+                             .CountAsync();
     }
 }

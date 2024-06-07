@@ -2,8 +2,9 @@
 @using LibraryApp.Models
 @using Microsoft.AspNetCore.Authorization
 @inject Services.IBorrowedService BorrowedService
-@attribute [StreamRendering]
+@inject NavigationManager NavigationManager
 @attribute [Authorize(Roles = "admin")]
+@rendermode InteractiveServer
 
 <PageTitle>Borrowed</PageTitle>
 
@@ -24,6 +25,11 @@ else
                 <th>Planned Return Date</th>
                 <th>Return Date</th>
                 <th>Charge</th>
+                <AuthorizeView>
+                    <Authorized>
+                        <th>Edit</th>
+                    </Authorized>
+                </AuthorizeView>
             </tr>
         </thead>
         <tbody>
@@ -36,6 +42,14 @@ else
                     <td>@borrowed.PlannedReturnDate</td>
                     <td>@borrowed.ReturnDate</td>
                     <td>@borrowed.Charge</td>
+                    <AuthorizeView>
+                        <Authorized>
+                            <td>
+                                <button @onclick="() => EditBorrowed(borrowed.BorrowedId)"
+                                        disabled="@(IsEntryReturned(borrowed))">Edit</button>
+                            </td>
+                        </Authorized>
+                    </AuthorizeView>
                 </tr>
             }
         </tbody>
@@ -43,10 +57,20 @@ else
 }
 
 @code {
-    private List<BorrowedDetail> borrowedDetails;
-
+    private List<BorrowedDetail>? borrowedDetails;
     protected override async Task OnInitializedAsync()
     {
         borrowedDetails = await BorrowedService.GetBorrowedDetailsAsync();
+    }
+
+    private void EditBorrowed(int borrowedId) {
+        NavigationManager.NavigateTo($"/edit-borrowed/{borrowedId}");
+    }
+
+    private bool IsEntryReturned(BorrowedDetail borrowed) {
+        if (borrowed.ReturnDate == null) {
+            return false;
+        }
+        return true;
     }
 }

@@ -1,0 +1,65 @@
+﻿@page "/users"
+@using LibraryApp.Models
+@using Microsoft.AspNetCore.Authorization
+@inject Services.IUserService UserService
+@attribute [Authorize(Roles = "admin")]
+@rendermode InteractiveServer
+
+<PageTitle>Users</PageTitle>
+
+<h3>Users</h3>
+
+@if (users == null)
+{
+    <p><em>Loading...</em></p>
+}
+else if (users.Count == 0)
+{
+    <p>No users found.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Login</th>
+                <th>Mail</th>
+                <th>User Role</th>
+                <th>Currently Borrowed</th>
+                <th>Returned</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < users.Count; i++)
+            {
+                var user = users[i];
+                var currentlyBorrowed = currentlyBorrowedCounts[user.UserId];
+                var returned = returnedCounts[user.UserId];
+                <tr>
+                    <td>@user.Login</td>
+                    <td>@user.Mail</td>
+                    <td>@user.UserRole</td>
+                    <td>@currentlyBorrowed</td>
+                    <td>@returned</td>
+                </tr>
+            }
+        </tbody>
+</table>
+}
+
+@code {
+    private List<User> users;
+    private Dictionary<int, int> currentlyBorrowedCounts = new Dictionary<int, int>();
+    private Dictionary<int, int> returnedCounts = new Dictionary<int, int>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        users = await UserService.GetAllUsersAsync();
+
+        foreach (var user in users)
+        {
+            currentlyBorrowedCounts[user.UserId] = await UserService.GetCurrentlyBorrowedAsync(user.UserId);
+            returnedCounts[user.UserId] = await UserService.GetReturnedAsync(user.UserId);
+        }
+    }
+}
