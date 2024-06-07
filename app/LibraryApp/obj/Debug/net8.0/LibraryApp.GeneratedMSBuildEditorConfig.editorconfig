@@ -34,20 +34,20 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9BY2NvdW50L0xvZ291dC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Users/gimlig/Developer/BazyDanych/Biblioteka/app/LibraryApp/Components/Pages/Account/MyAccount.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9BY2NvdW50L015QWNjb3VudC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Users/gimlig/Developer/BazyDanych/Biblioteka/app/LibraryApp/Components/Pages/Account/Register.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9BY2NvdW50L1JlZ2lzdGVyLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Users/gimlig/Developer/BazyDanych/Biblioteka/app/LibraryApp/Components/Pages/Admin/BorrowedView.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9BZG1pbi9Cb3Jyb3dlZFZpZXcucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Users/gimlig/Developer/BazyDanych/Biblioteka/app/LibraryApp/Components/Pages/Books.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9Cb29rcy5yYXpvcg==
-build_metadata.AdditionalFiles.CssScope = 
-
-[/Users/gimlig/Developer/BazyDanych/Biblioteka/app/LibraryApp/Components/Pages/Borrowed.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9Cb3Jyb3dlZC5yYXpvcg==
-build_metadata.AdditionalFiles.CssScope = 
-
-[/Users/gimlig/Developer/BazyDanych/Biblioteka/app/LibraryApp/Components/Pages/Counter.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9Db3VudGVyLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/gimlig/Developer/BazyDanych/Biblioteka/app/LibraryApp/Components/Pages/CRUD/Buttons/CreateBookButton.razor]
@@ -66,8 +66,16 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9Ib21lLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Users/gimlig/Developer/BazyDanych/Biblioteka/app/LibraryApp/Components/Pages/Search.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9TZWFyY2gucmF6b3I=
+[/Users/gimlig/Developer/BazyDanych/Biblioteka/app/LibraryApp/Components/Pages/Shared/BorrowBook.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9TaGFyZWQvQm9ycm93Qm9vay5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/gimlig/Developer/BazyDanych/Biblioteka/app/LibraryApp/Components/Pages/Shared/Search.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9TaGFyZWQvU2VhcmNoLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/gimlig/Developer/BazyDanych/Biblioteka/app/LibraryApp/Components/Pages/User/BorrowedUserView.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9Vc2VyL0JvcnJvd2VkVXNlclZpZXcucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/gimlig/Developer/BazyDanych/Biblioteka/app/LibraryApp/Components/Routes.razor]

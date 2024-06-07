@@ -1,0 +1,58 @@
+﻿@page "/borrowed-user"
+@using LibraryApp.Data
+@using LibraryApp.Models
+@using LibraryApp.Services
+@using Microsoft.EntityFrameworkCore
+@inject IBorrowedService BorrowedService
+@inject IUserService UserService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<h3>Borrowed User View</h3>
+
+@if (BorrowedDetails == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Book</th>
+                <th>Borrow Date</th>
+                <th>Planned Return Date</th>
+                <th>Return Date</th>
+                <th>Charge</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var borrowed in BorrowedDetails)
+            {
+                <tr>
+                    <td>@borrowed.Book</td>
+                    <td>@borrowed.BorrowDate</td>
+                    <td>@borrowed.PlannedReturnDate</td>
+                    <td>@borrowed.ReturnDate</td>
+                    <td>@borrowed.Charge</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private User? UserDetail;
+    private List<BorrowedDetail>? BorrowedDetails;
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity != null && user.Identity.IsAuthenticated)
+        {
+            var userName = user.Identity.Name;
+            UserDetail = await UserService.GetUserByNameAsync(userName);
+            BorrowedDetails = await BorrowedService.GetBorrowedDetailsByUserAsync(UserDetail.Login);
+        }
+    }
+}

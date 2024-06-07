@@ -3,6 +3,7 @@
 @using LibraryApp.Models
 @inject IBookService BookService
 @inject IGenresService GenresService
+@inject NavigationManager NavigationManager
 @rendermode InteractiveServer
 
 <h3>Book Search</h3>
@@ -94,16 +95,14 @@ else if (SearchResults != null)
     private string SearchTerm = string.Empty;
     private int SelectedGenreId;
     private List<Genre> Genres = new List<Genre>();
-    private List<BookDetail> SearchResults;
+    private List<BookDetail>? SearchResults;
     protected override async Task OnInitializedAsync()
     {
-        Console.WriteLine("Here");
         Genres = await GenresService.GetGenresAsync();
     }
 
     private async Task SearchBooksButton()
     {
-        Console.WriteLine("Search button clicked."); // Check if the button click event is being triggered
         if (SearchType == "Genre")
         {
             var selectedGenre = Genres.FirstOrDefault(g => g.GenreId == SelectedGenreId)?.Name;
@@ -118,8 +117,8 @@ else if (SearchResults != null)
         }
     }
 
-    private async Task BorrowBook(int id) {
-
+    private void BorrowBook(int id) {
+        NavigationManager.NavigateTo($"/borrow-book/{id}");
     }
 
     private bool IsBookAvailable(BookDetail book) {

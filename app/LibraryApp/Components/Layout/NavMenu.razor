@@ -1,4 +1,10 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@using LibraryApp.Data
+@using LibraryApp.Services
+@using Microsoft.EntityFrameworkCore
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IUserService UserService
+
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">LibraryApp</a>
     </div>
@@ -13,11 +19,12 @@
                 <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
             </NavLink>
         </div>
-        <AuthorizeView Roles="admin, user">
+
+        <AuthorizeView Roles="user">
             <Authorized>
                 <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="books">
-                        <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Books
+                    <NavLink class="nav-link" href=@($"borrowed-user")>
+                        <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Borrowed
                     </NavLink>
                 </div>
             </Authorized>
@@ -38,7 +45,26 @@
                 <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Search
             </NavLink>
         </div>
-        
     </nav>
 </div>
 
+@* @* @code {
+    private string? userName;
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        userName = user.Identity.Name;
+
+        @* if (user.Identity != null && user.Identity.IsAuthenticated)
+        {
+            var userName = user.Identity.Name;
+            var foundUser = await UserService.GetUserByNameAsync(userName);
+
+            if (foundUser != null)
+            {
+                userId = foundUser.UserId;
+            }
+        } 
+    }
+}  *@

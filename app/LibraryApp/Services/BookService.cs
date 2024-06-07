@@ -17,6 +17,11 @@ public class BookService : IBookService
         _context = context;
     }
 
+    public async Task<BookDetail> GetBookDetailAsync(int bookId)
+    {
+        return await _context.BookDetails.SingleOrDefaultAsync(b => b.BookId == bookId);
+    }
+
     public async Task<List<BookDetail>> GetBookDetailsAsync()
     {
         return await _context.BookDetails.ToListAsync();

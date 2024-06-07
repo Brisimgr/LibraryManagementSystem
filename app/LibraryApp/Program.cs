@@ -24,15 +24,16 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 builder.Services.AddAuthorization();
 builder.Services.AddCascadingAuthenticationState();  
 
+builder.Services.AddScoped<IBookService, BookService>();
+builder.Services.AddScoped<IBorrowedService, BorrowedService>();
+builder.Services.AddScoped<IGenresService, GenresService>();
+builder.Services.AddScoped<IUserService, UserService>();
+
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<LibraryDbContext>(options => {
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
-
-builder.Services.AddScoped<IBookService, BookService>();
-builder.Services.AddScoped<IBorrowedService, BorrowedService>();
-builder.Services.AddScoped<IGenresService, GenresService>();
 
 var app = builder.Build();
 
@@ -47,6 +48,8 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
+app.UseRouting();
+
 app.UseAntiforgery();
 app.UseAuthentication();
 app.UseAuthorization();

@@ -1,0 +1,76 @@
+﻿@page "/borrow-book/{bookId:int}"
+
+@using LibraryApp.Data
+@using LibraryApp.Services
+@using LibraryApp.Models
+@using Microsoft.EntityFrameworkCore
+@inject IBookService BookService
+@inject IBorrowedService BorrowedService
+@inject IUserService UserService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+
+<h3>Borrow Book</h3>
+
+@if (BookDetail != null)
+{
+    <div>
+        <p>Title: @BookDetail.Title</p>
+        <p>Author: @BookDetail.Author</p>
+        <p>Genre: @BookDetail.Genre</p>
+        <!-- Dodaj więcej informacji na temat książki -->
+    </div>
+}
+else
+{
+    <p>Book not found</p>
+}
+
+<div>
+    <label for="borrowDate">Borrow Date:</label>
+    <input id="borrowDate" type="date" @bind="BorrowDate" />
+</div>
+
+<button @onclick="BorrowBookButton">Confirm Borrow</button>
+
+@code {
+    [Parameter]
+    public int BookId { get; set; }
+    private BookDetail? BookDetail;
+    private Borrowed NewBorrow = new Borrowed();
+    private DateOnly BorrowDate = DateOnly.FromDateTime(DateTime.Today);
+    private int UserId;
+    private string? UserName;
+    protected override async Task OnInitializedAsync()
+    {
+        BookDetail = await BookService.GetBookDetailAsync(BookId);
+        var authenticationState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authenticationState.User;
+
+        // Sprawdzanie, czy użytkownik jest zalogowany
+        if (user.Identity != null && user.Identity.IsAuthenticated)
+        {
+            // Pobieranie identyfikatora użytkownika
+            UserName = user.Identity.Name;
+            var foundUser = await UserService.GetUserByNameAsync(UserName);
+            if (foundUser != null)
+            {
+                UserId = foundUser.UserId;
+            }
+        }
+    }
+
+    private async Task BorrowBookButton() {
+        NewBorrow.UserId = UserId;
+        NewBorrow.BookId = BookDetail?.BookId;
+        NewBorrow.BorrowDate = BorrowDate;
+        NewBorrow.PlannedReturnDate = null;
+        NewBorrow.ReturnDate = null;
+        NewBorrow.Charge = 0;
+
+        await BorrowedService.AddBorrowedAsync(NewBorrow);
+
+        NavigationManager.NavigateTo($"/borrowed-user/{UserId}");
+    }
+}    

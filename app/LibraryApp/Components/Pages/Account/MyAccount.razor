@@ -1,0 +1,31 @@
+﻿@page "/my-account"
+@using LibraryApp.Models
+@using LibraryApp.Services
+@using Microsoft.EntityFrameworkCore
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IUserService UserService
+
+<h3>MyAccount</h3>
+
+@if (UserDetail != null) {
+    <div>
+        <p><strong>Login: </strong>@UserDetail.Login</p>
+        <p><strong>Mail: </strong>@UserDetail.Mail</p>
+        <p><strong>Role: </strong>@UserDetail.UserRole</p>
+    </div>
+}
+
+@code {
+    private User? UserDetail;
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity != null && user.Identity.IsAuthenticated)
+        {
+            var userName = user.Identity.Name;
+            UserDetail = await UserService.GetUserByNameAsync(userName);
+        }
+    }
+}
