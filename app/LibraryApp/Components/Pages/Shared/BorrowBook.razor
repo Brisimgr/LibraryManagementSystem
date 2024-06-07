@@ -16,6 +16,20 @@
 @if (BookDetail != null)
 {
     <div>
+        <AuthorizeView Roles="admin">
+            <Authorized>
+                @if (Users != null) 
+                {
+                    <label for="selectUser">Select User:</label>
+                    <select id="selectUser" @bind="SelectedUserId">
+                        @foreach (var user in Users)
+                        {
+                            <option value="@user.UserId">@user.Login</option>
+                        }
+                    </select>
+                }
+            </Authorized>
+        </AuthorizeView>
         <p>Title: @BookDetail.Title</p>
         <p>Author: @BookDetail.Author</p>
         <p>Genre: @BookDetail.Genre</p>
@@ -28,11 +42,24 @@ else
 }
 
 <div>
-    <label for="borrowDate">Borrow Date:</label>
+    <label for="datepicker">Borrow Date:</label>
     <input id="borrowDate" type="date" @bind="BorrowDate" />
+    @if (!IsValidDate) {
+        <p class="text-danger">Borrow date cannot be in the past.</p>
+    }
 </div>
 
-<button @onclick="BorrowBookButton">Confirm Borrow</button>
+<AuthorizeView Roles="admin">
+    <Authorized>
+        <button @onclick="BorrowBookButtonAdmin">Confirm Borrow</button>
+    </Authorized>
+</AuthorizeView>
+
+<AuthorizeView Roles="user">
+    <Authorized>
+        <button @onclick="BorrowBookButtonUser">Confirm Reservation</button>
+    </Authorized>
+</AuthorizeView>
 
 @code {
     [Parameter]
@@ -40,11 +67,16 @@ else
     private BookDetail? BookDetail;
     private Borrowed NewBorrow = new Borrowed();
     private DateOnly BorrowDate = DateOnly.FromDateTime(DateTime.Today);
+    private DateOnly MinDate = DateOnly.FromDateTime(DateTime.Today);
     private int UserId;
     private string? UserName;
+    private List<User>? Users;
+    private int SelectedUserId;
+    private bool IsValidDate = true;
     protected override async Task OnInitializedAsync()
     {
         BookDetail = await BookService.GetBookDetailAsync(BookId);
+        Users = await UserService.GetAllUsersAsync();
         var authenticationState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var user = authenticationState.User;
 
@@ -61,7 +93,10 @@ else
         }
     }
 
-    private async Task BorrowBookButton() {
+    private async Task BorrowBookButtonUser() {
+        ValidateDate();
+        if(!IsValidDate) return;
+
         NewBorrow.UserId = UserId;
         NewBorrow.BookId = BookDetail?.BookId;
         NewBorrow.BorrowDate = BorrowDate;
@@ -72,5 +107,32 @@ else
         await BorrowedService.AddBorrowedAsync(NewBorrow);
 
         NavigationManager.NavigateTo($"/borrowed-user/{UserId}");
+    }
+
+    private async Task BorrowBookButtonAdmin() {
+        ValidateDate();
+        if(!IsValidDate) return;
+
+        NewBorrow.UserId = SelectedUserId;
+        NewBorrow.BookId = BookDetail?.BookId;
+        NewBorrow.BorrowDate = BorrowDate;
+        NewBorrow.PlannedReturnDate = null;
+        NewBorrow.ReturnDate = null;
+        NewBorrow.Charge = 0;
+
+        await BorrowedService.AddBorrowedAsync(NewBorrow);
+
+        NavigationManager.NavigateTo("/borrowed");
+    }
+
+    private void ValidateDate() {
+        if (DateOnly.TryParse(BorrowDate.ToString(), out var selectedDate))
+        {
+            IsValidDate = selectedDate >= MinDate;
+        }
+        else
+        {
+            IsValidDate = false;
+        }
     }
 }    

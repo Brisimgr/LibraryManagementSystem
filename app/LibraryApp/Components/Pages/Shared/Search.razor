@@ -55,6 +55,11 @@
                 <th>Branch Address</th>
                 <AuthorizeView Roles="user">
                     <Authorized>
+                        <th>Make Reservation</th>
+                    </Authorized>
+                </AuthorizeView>
+                <AuthorizeView Roles="admin">
+                    <Authorized>
                         <th>Borrow</th>
                     </Authorized>
                 </AuthorizeView>
@@ -73,6 +78,14 @@
                     <td>@book.Branch</td>
                     <td>@book.BranchAddress</td>
                     <AuthorizeView Roles="user">
+                        <Authorized>
+                            <td>
+                                <button @onclick="() => BorrowBook(book.BookId)"
+                                        disabled="@(!IsBookAvailable(book))">Reserve</button>
+                            </td>
+                        </Authorized>
+                    </AuthorizeView>
+                    <AuthorizeView Roles="admin">
                         <Authorized>
                             <td>
                                 <button @onclick="() => BorrowBook(book.BookId)"

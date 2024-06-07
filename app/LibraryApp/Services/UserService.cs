@@ -21,4 +21,11 @@ public class UserService : IUserService
     {
         return await _context.Users.AsNoTracking().SingleOrDefaultAsync(u => u.UserId == userId);
     }
+
+    public Task<List<User>> GetAllUsersAsync()
+    {
+        return _context.Users
+                       .Where(u => u.UserRole != "admin")
+                       .ToListAsync();
+    }
 }
