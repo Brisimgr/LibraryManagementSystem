@@ -28,6 +28,8 @@ builder.Services.AddScoped<IBookService, BookService>();
 builder.Services.AddScoped<IBorrowedService, BorrowedService>();
 builder.Services.AddScoped<IGenresService, GenresService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IBranchesService, BranchesService>();
+builder.Services.AddScoped<IAuthorService, AuthorService>();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 

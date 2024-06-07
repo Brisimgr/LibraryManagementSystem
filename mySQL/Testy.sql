@@ -1,10 +1,8 @@
 USE libraryDB;
 
-UPDATE books
-SET books.genre_id = 5
-WHERE books.author_id = 12;
-
-SELECT * FROM book_details;
+-- UPDATE books
+-- SET books.genre_id = 5
+-- WHERE books.author_id = 12;
 
 -- SELECT * FROM genres;
 
@@ -27,6 +25,12 @@ SELECT * FROM book_details;
 -- UPDATE borrowed
 -- SET return_date = "2024-05-20"
 -- WHERE borrowed_id = 1;
+
+UPDATE books
+SET genre_id = 6
+WHERE book_id = 32;
+
+SELECT * FROM books;
 
 -- CALL find_books('author', 'D');
 

@@ -3,6 +3,7 @@
 @using LibraryApp.Data
 @using LibraryApp.Services
 @using LibraryApp.Models
+@using Microsoft.AspNetCore.Authorization
 @using Microsoft.EntityFrameworkCore
 @inject IBookService BookService
 @inject IBorrowedService BorrowedService
@@ -10,56 +11,71 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager
 @rendermode InteractiveServer
+@attribute [Authorize(Roles = "admin, user")]
 
-<h3>Borrow Book</h3>
+<div class="container mt-4">
+    <h3>Borrow Book</h3>
 
-@if (BookDetail != null)
-{
-    <div>
-        <AuthorizeView Roles="admin">
-            <Authorized>
-                @if (Users != null) 
-                {
-                    <label for="selectUser">Select User:</label>
-                    <select id="selectUser" @bind="SelectedUserId">
-                        @foreach (var user in Users)
+    @if (BookDetail != null)
+    {
+        <div class="card mt-3">
+            <div class="card-body">
+                <h5 class="card-title">Book Details</h5>
+                <p class="card-text"><strong>Title: </strong>@BookDetail.Title</p>
+                <p class="card-text"><strong>Author: </strong>@BookDetail.Author</p>
+                <p class="card-text"><strong>Genre: </strong>@BookDetail.Genre</p>
+
+                <AuthorizeView Roles="admin">
+                    <Authorized>
+                        @if (Users != null)
                         {
-                            <option value="@user.UserId">@user.Login</option>
+                            <div class="mb-3">
+                                <label for="selectUser" class="form-label">Select User:</label>
+                                <select id="selectUser" class="form-select" @bind="SelectedUserId">
+                                    @foreach (var user in Users)
+                                    {
+                                        <option value="@user.UserId">@user.Login</option>
+                                    }
+                                </select>
+                            </div>
                         }
-                    </select>
-                }
-            </Authorized>
-        </AuthorizeView>
-        <p>Title: @BookDetail.Title</p>
-        <p>Author: @BookDetail.Author</p>
-        <p>Genre: @BookDetail.Genre</p>
-        <!-- Dodaj więcej informacji na temat książki -->
-    </div>
-}
-else
-{
-    <p>Book not found</p>
-}
-
-<div>
-    <label for="datepicker">Borrow Date:</label>
-    <input id="borrowDate" type="date" @bind="BorrowDate" />
-    @if (!IsValidDate) {
-        <p class="text-danger">Borrow date cannot be in the past.</p>
+                    </Authorized>
+                </AuthorizeView>
+            </div>
+        </div>
     }
+    else
+    {
+        <div class="alert alert-warning mt-3" role="alert">
+            Book not found.
+        </div>
+    }
+
+    <div class="card mt-3">
+        <div class="card-body">
+            <div class="mb-3">
+                <label for="datepicker" class="form-label">Borrow Date:</label>
+                <input id="borrowDate" type="date" class="form-control" @bind="BorrowDate" />
+                @if (!IsValidDate)
+                {
+                    <div class="text-danger mt-2">Borrow date cannot be in the past.</div>
+                }
+            </div>
+
+            <AuthorizeView Roles="admin">
+                <Authorized>
+                    <button class="btn btn-primary" @onclick="BorrowBookButtonAdmin">Confirm Borrow</button>
+                </Authorized>
+            </AuthorizeView>
+
+            <AuthorizeView Roles="user">
+                <Authorized>
+                    <button class="btn btn-primary" @onclick="BorrowBookButtonUser">Confirm Reservation</button>
+                </Authorized>
+            </AuthorizeView>
+        </div>
+    </div>
 </div>
-
-<AuthorizeView Roles="admin">
-    <Authorized>
-        <button @onclick="BorrowBookButtonAdmin">Confirm Borrow</button>
-    </Authorized>
-</AuthorizeView>
-
-<AuthorizeView Roles="user">
-    <Authorized>
-        <button @onclick="BorrowBookButtonUser">Confirm Reservation</button>
-    </Authorized>
-</AuthorizeView>
 
 @code {
     [Parameter]
@@ -73,6 +89,7 @@ else
     private List<User>? Users;
     private int SelectedUserId;
     private bool IsValidDate = true;
+
     protected override async Task OnInitializedAsync()
     {
         BookDetail = await BookService.GetBookDetailAsync(BookId);
@@ -80,10 +97,8 @@ else
         var authenticationState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var user = authenticationState.User;
 
-        // Sprawdzanie, czy użytkownik jest zalogowany
         if (user.Identity != null && user.Identity.IsAuthenticated)
         {
-            // Pobieranie identyfikatora użytkownika
             UserName = user.Identity.Name;
             var foundUser = await UserService.GetUserByNameAsync(UserName);
             if (foundUser != null)
@@ -93,9 +108,10 @@ else
         }
     }
 
-    private async Task BorrowBookButtonUser() {
+    private async Task BorrowBookButtonUser()
+    {
         ValidateDate();
-        if(!IsValidDate) return;
+        if (!IsValidDate) return;
 
         NewBorrow.UserId = UserId;
         NewBorrow.BookId = BookDetail?.BookId;
@@ -106,12 +122,13 @@ else
 
         await BorrowedService.AddBorrowedAsync(NewBorrow);
 
-        NavigationManager.NavigateTo($"/borrowed-user/{UserId}");
+        NavigationManager.NavigateTo($"/borrowed-user");
     }
 
-    private async Task BorrowBookButtonAdmin() {
+    private async Task BorrowBookButtonAdmin()
+    {
         ValidateDate();
-        if(!IsValidDate) return;
+        if (!IsValidDate) return;
 
         NewBorrow.UserId = SelectedUserId;
         NewBorrow.BookId = BookDetail?.BookId;
@@ -125,7 +142,8 @@ else
         NavigationManager.NavigateTo("/borrowed");
     }
 
-    private void ValidateDate() {
+    private void ValidateDate()
+    {
         if (DateOnly.TryParse(BorrowDate.ToString(), out var selectedDate))
         {
             IsValidDate = selectedDate >= MinDate;
@@ -135,4 +153,4 @@ else
             IsValidDate = false;
         }
     }
-}    
+}

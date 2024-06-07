@@ -5,15 +5,24 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IUserService UserService
 
-<h3>MyAccount</h3>
-
-@if (UserDetail != null) {
-    <div>
-        <p><strong>Login: </strong>@UserDetail.Login</p>
-        <p><strong>Mail: </strong>@UserDetail.Mail</p>
-        <p><strong>Role: </strong>@UserDetail.UserRole</p>
-    </div>
-}
+<div class="container mt-4">
+    <h3>My Account</h3>
+    @if (UserDetail != null) {
+        <div class="card mt-3">
+            <div class="card-body">
+                <h5 class="card-title">Account Information</h5>
+                <p class="card-text"><strong>Login: </strong>@UserDetail.Login</p>
+                <p class="card-text"><strong>Email: </strong>@UserDetail.Mail</p>
+                <p class="card-text"><strong>Role: </strong>@UserDetail.UserRole</p>
+            </div>
+        </div>
+    }
+    else {
+        <div class="alert alert-warning mt-3" role="alert">
+            User details not found. Please log in to view your account information.
+        </div>
+    }
+</div>
 
 @code {
     private User? UserDetail;

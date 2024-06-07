@@ -1,0 +1,134 @@
+﻿@page "/add-book"
+@using LibraryApp.Models
+@using LibraryApp.Services
+@using Microsoft.AspNetCore.Authorization
+@inject IBookService BookService
+@inject IAuthorService AuthorService
+@inject IBranchesService BranchesService
+@inject IGenresService GenresService
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+@attribute [Authorize(Roles = "admin")]
+
+<h3>Add New Book</h3>
+
+<div class="container mt-4">
+    <div class="mb-3">
+        <label for="title" class="form-label">Title:</label>
+        <input id="title" type="text" class="form-control" @bind="NewBook.Title" />
+    </div>
+
+    <div class="mb-3">
+        <label for="author" class="form-label">Author:</label>
+        <select id="author" class="form-select" @bind="AuthorOption">
+            <option value="1">Select an author</option>
+            <option value="0">Add New Author</option>
+        </select>
+    </div>
+
+    @if (AuthorOption == 0)
+    {
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label for="newAuthorFirstName" class="form-label">First Name:</label>
+                <input id="newAuthorFirstName" type="text" class="form-control" @bind="NewAuthor.FirstName" />
+            </div>
+            <div class="col-md-4">
+                <label for="newAuthorLastName" class="form-label">Last Name:</label>
+                <input id="newAuthorLastName" type="text" class="form-control" @bind="NewAuthor.LastName" />
+            </div>
+        </div>
+    }
+    else 
+    {
+        <div class="mb-3">
+            <label for="author" class="form-label">Author:</label>
+            <select id="author" class="form-select" @bind="SelectedAuthorId">
+                @foreach (var author in Authors)
+                {
+                    <option value="@author.AuthorId">@author.FirstName @author.LastName</option>
+                }
+            </select>
+        </div>
+    }
+
+    <div class="mb-3">
+        <label for="genre" class="form-label">Genre:</label>
+        <select id="genre" class="form-select" @bind="SelectedGenreId">
+            <option value="">Select a genre</option>
+            @foreach (var genre in Genres)
+            {
+                <option value="@genre.GenreId">@genre.Name</option>
+            }
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="branch" class="form-label">Branch:</label>
+        <select id="branch" class="form-select" @bind="SelectedBranchId">
+            <option value="">Select a branch</option>
+            @foreach (var branch in Branches)
+            {
+                <option value="@branch.BranchId">@branch.Name - @branch.Address</option>
+            }
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="pages" class="form-label">Pages:</label>
+        <input id="pages" type="number" class="form-control" @bind="NewBook.Pages" />
+    </div>
+
+    <div class="mb-3">
+        <label for="publishYear" class="form-label">Publish Year:</label>
+        <input id="publishYear" type="number" class="form-control" @bind="NewBook.PublishYear" />
+    </div>
+
+    <div class="mb-3">
+        <label for="availability" class="form-label">Availability:</label>
+        <select id="availability" class="form-select" @bind="NewBook.Availability">
+            <option value="available">Available</option>
+            <option value="not available">Not Available</option>
+        </select>
+    </div>
+
+    <button class="btn btn-primary" @onclick="AddBook">Add Book</button>
+</div>
+
+@code {
+    private Book NewBook { get; set; } = new Book();
+    private Author NewAuthor { get; set; } = new Author();
+    private List<Author> Authors { get; set; } = new List<Author>();
+    private List<Branch> Branches { get; set; } = new List<Branch>();
+    private List<Genre> Genres { get; set; } = new List<Genre>();
+    private int SelectedAuthorId { get; set; }
+    private int AuthorOption;
+    private int SelectedBranchId { get; set; }
+    private int SelectedGenreId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Authors = await AuthorService.GetAllAuthorsAsync();
+        Branches = await BranchesService.GetAllBranches();
+        Genres = await GenresService.GetGenresAsync();
+        NewBook.Availability = "available";
+    }
+
+    private async Task AddBook()
+    {
+        if (AuthorOption == 0)
+        {
+            await AuthorService.AddAuthorAsync(NewAuthor);
+            NewBook.AuthorId = NewAuthor.AuthorId;
+        }
+        else
+        {
+            NewBook.AuthorId = SelectedAuthorId;
+        }
+        NewBook.GenreId = SelectedGenreId;
+        NewBook.BranchId = SelectedBranchId;
+
+        await BookService.AddBookAsync(NewBook);
+        NavigationManager.NavigateTo("/search-books");
+    }
+}

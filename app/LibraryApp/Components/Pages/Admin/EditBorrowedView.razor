@@ -8,42 +8,48 @@
 @attribute [Authorize(Roles = "admin")]
 @rendermode InteractiveServer
 
-<h3>Edit Borrowed Entry</h3>
-@if (borrowedDetail != null) {
-    <div>
-        <p><strong>User: </strong>@borrowedDetail.User</p>
-        <p><strong>Book: </strong>@borrowedDetail.Book</p>
-        <EditForm Model="@Model" OnValidSubmit="HandleValidSubmit">
-            <DataAnnotationsValidator />
-            <ValidationSummary />
+<div class="container mt-4">
+    <h3>Edit Borrowed Entry</h3>
+    @if (borrowedDetail != null) {
+        <div class="card mt-3">
+            <div class="card-body">
+                <p><strong>User: </strong>@borrowedDetail.User</p>
+                <p><strong>Book: </strong>@borrowedDetail.Book</p>
+                <EditForm Model="@Model" OnValidSubmit="HandleValidSubmit">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
 
-            <div class="mb-3">
-                <label for="borrowDate" class="form-label">Borrow Date</label>
-                <input id="borrowDate" type="date" class="form-control" @bind="Model.BorrowDate" />
+                    <div class="mb-3">
+                        <label for="borrowDate" class="form-label">Borrow Date</label>
+                        <input id="borrowDate" type="date" class="form-control" @bind="Model.BorrowDate" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="plannedReturnDate" class="form-label">Planned Return Date</label>
+                        <input id="plannedReturnDate" type="date" class="form-control" @bind="Model.PlannedReturnDate" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="returnDate" class="form-label">Return Date</label>
+                        <input id="returnDate" type="date" class="form-control" @bind="Model.ReturnDate" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="charge" class="form-label">Charge</label>
+                        <input id="charge" type="number" class="form-control" @bind="Model.Charge" />
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </EditForm>
             </div>
-
-            <div class="mb-3">
-                <label for="plannedReturnDate" class="form-label">Planned Return Date</label>
-                <input id="plannedReturnDate" type="date" class="form-control" @bind="Model.PlannedReturnDate" />
-            </div>
-
-            <div class="mb-3">
-                <label for="returnDate" class="form-label">Return Date</label>
-                <input id="returnDate" type="date" class="form-control" @bind="Model.ReturnDate" />
-            </div>
-
-            <div class="mb-3">
-                <label for="charge" class="form-label">Charge</label>
-                <input id="charge" type="number" class="form-control" @bind="Model.Charge" />
-            </div>
-
-            <button type="submit" class="btn btn-primary">Save</button>
-        </EditForm>
-    </div>
-}
-else {
-    <p>Borrowed entry not found.</p>
-}
+        </div>
+    }
+    else {
+        <div class="alert alert-warning" role="alert">
+            Borrowed entry not found.
+        </div>
+    }
+</div>
 
 @code {
     [Parameter]
@@ -53,6 +59,7 @@ else {
     private EditBorrowedModel Model { get; set; } = new();
     private BorrowedDetail? borrowedDetail;
     private Borrowed? borrowed;
+
     protected override async Task OnInitializedAsync() {
         borrowedDetail = await BorrowedService.GetBorrowedDetailByIdAsync(BorrowedId);
         borrowed = await BorrowedService.GetBorrowedByIdAsync(BorrowedId);

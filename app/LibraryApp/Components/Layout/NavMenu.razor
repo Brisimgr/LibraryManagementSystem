@@ -16,15 +16,15 @@
     <nav class="flex-column">
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
+                <span class="bi bi-house-door-fill" aria-hidden="true"></span> Home
             </NavLink>
         </div>
 
         <AuthorizeView Roles="user">
             <Authorized>
                 <div class="nav-item px-3">
-                    <NavLink class="nav-link" href=@($"borrowed-user")>
-                        <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Borrowed
+                    <NavLink class="nav-link" href="borrowed-user">
+                        <span class="bi bi-person-check-fill" aria-hidden="true"></span> Borrowed
                     </NavLink>
                 </div>
             </Authorized>
@@ -34,17 +34,12 @@
             <Authorized>
                 <div class="nav-item px-3">
                     <NavLink class="nav-link" href="borrowed">
-                        <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Borrowed
+                        <span class="bi bi-clipboard-data" aria-hidden="true"></span> Borrowed
                     </NavLink>
                 </div>
-            </Authorized>
-        </AuthorizeView>
-
-        <AuthorizeView Roles="admin">
-            <Authorized>
                 <div class="nav-item px-3">
                     <NavLink class="nav-link" href="users">
-                        <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Users
+                        <span class="bi bi-people-fill" aria-hidden="true"></span> Users
                     </NavLink>
                 </div>
             </Authorized>
@@ -52,29 +47,8 @@
 
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="search-books">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Search
+                <span class="bi bi-search" aria-hidden="true"></span> Search
             </NavLink>
         </div>
     </nav>
 </div>
-
-@* @* @code {
-    private string? userName;
-    protected override async Task OnInitializedAsync()
-    {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-        userName = user.Identity.Name;
-
-        @* if (user.Identity != null && user.Identity.IsAuthenticated)
-        {
-            var userName = user.Identity.Name;
-            var foundUser = await UserService.GetUserByNameAsync(userName);
-
-            if (foundUser != null)
-            {
-                userId = foundUser.UserId;
-            }
-        } 
-    }
-}  *@

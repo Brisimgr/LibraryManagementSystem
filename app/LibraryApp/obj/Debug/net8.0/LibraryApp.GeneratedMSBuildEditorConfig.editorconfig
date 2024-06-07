@@ -42,8 +42,16 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9BY2NvdW50L1JlZ2lzdGVyLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Users/gimlig/Developer/BazyDanych/Biblioteka/app/LibraryApp/Components/Pages/Admin/AddBookView.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9BZG1pbi9BZGRCb29rVmlldy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Users/gimlig/Developer/BazyDanych/Biblioteka/app/LibraryApp/Components/Pages/Admin/BorrowedView.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9BZG1pbi9Cb3Jyb3dlZFZpZXcucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/gimlig/Developer/BazyDanych/Biblioteka/app/LibraryApp/Components/Pages/Admin/EditBookView.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9BZG1pbi9FZGl0Qm9va1ZpZXcucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/gimlig/Developer/BazyDanych/Biblioteka/app/LibraryApp/Components/Pages/Admin/EditBorrowedView.razor]

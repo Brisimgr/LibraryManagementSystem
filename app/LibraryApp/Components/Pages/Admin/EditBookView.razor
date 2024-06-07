@@ -1,0 +1,98 @@
+﻿@page "/edit-book/{bookId:int}"
+@using LibraryApp.Services
+@using LibraryApp.Models
+@using Microsoft.AspNetCore.Authorization
+@inject IBookService BookService
+@inject IBranchesService BranchesService
+@inject NavigationManager NavigationManager
+@attribute [Authorize(Roles = "admin")]
+@rendermode InteractiveServer
+
+<div class="container">
+    <h3>Edit Book</h3>
+
+    @if (BookDetail != null)
+    {
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>Title: </strong>@BookDetail.Title</p>
+                <p><strong>Author: </strong>@BookDetail.Author</p>
+                <p><strong>Genre: </strong>@BookDetail.Genre</p>
+                <p><strong>Pages: </strong>@BookDetail.Pages</p>
+                <p><strong>Publish Year: </strong>@BookDetail.PublishYear</p>
+
+                <div class="mb-3">
+                    <label for="availability" class="form-label">Availability:</label>
+                    <select id="availability" class="form-select" @bind="Model.Availability">
+                        <option value="available">Available</option>
+                        <option value="not available">Not Available</option>
+                    </select>
+                </div>
+
+                @if (branches != null) {
+                    <div class="mb-3">
+                        <label for="branch" class="form-label">Branch:</label>
+                        <select id="branch" class="form-select" @onchange="UpdateBranchAddress">
+                            @foreach (var branch in branches)
+                            {
+                                <option value="@branch.BranchId">@branch.Name</option>
+                            }
+                        </select>
+                    </div>
+                }
+
+                <div class="mb-3">
+                    <label for="branchAddress" class="form-label">Branch Address:</label>
+                    <input id="branchAddress" class="form-control" @bind="BranchAddress" disabled />
+                </div>
+
+                <button type="submit" class="btn btn-primary" @onclick="SaveChanges">Save Changes</button>
+            </div>
+        </div>
+    }
+    else
+    {
+        <p>Book not found</p>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public int BookId { get; set; }
+
+    [SupplyParameterFromForm]
+    private EditBookModel Model { get; set; } = new();
+
+    private BookDetail? BookDetail;
+    private List<Branch>? branches;
+    private Book? book;
+    private string BranchAddress = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        BookDetail = await BookService.GetBookDetailAsync(BookId);
+        branches = await BranchesService.GetAllBranches();
+        book = await BookService.GetBookByIdAsync(BookId);
+        Model.BranchId = book.BranchId;
+        Model.Availability = book.Availability;
+    }
+
+    private async Task SaveChanges()
+    {
+        if (BookDetail != null)
+        {      
+            book.Availability = Model.Availability;
+            book.BranchId = Model.BranchId;
+            
+            await BookService.UpdateBookAsync(book);
+            NavigationManager.NavigateTo("/search-books");
+        }
+    }
+
+    private void UpdateBranchAddress(ChangeEventArgs e)
+    {
+        Model.BranchId = Convert.ToInt32(e.Value);
+        var selectedBranch = branches!.FirstOrDefault(b => b.BranchId == Model.BranchId);
+        BranchAddress = selectedBranch?.Address ?? "";
+    }
+}

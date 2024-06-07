@@ -2,47 +2,64 @@
 @using LibraryApp.Data
 @using LibraryApp.Models
 @using LibraryApp.Services
+@using Microsoft.AspNetCore.Authorization
 @using Microsoft.EntityFrameworkCore
 @inject IBorrowedService BorrowedService
 @inject IUserService UserService
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@attribute [Authorize(Roles = "user")]
 
-<h3>Borrowed User View</h3>
+<PageTitle>Borrowed Books</PageTitle>
 
-@if (BorrowedDetails == null)
-{
-    <p><em>Loading...</em></p>
-}
-else
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Book</th>
-                <th>Borrow Date</th>
-                <th>Planned Return Date</th>
-                <th>Return Date</th>
-                <th>Charge</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var borrowed in BorrowedDetails)
-            {
-                <tr>
-                    <td>@borrowed.Book</td>
-                    <td>@borrowed.BorrowDate</td>
-                    <td>@borrowed.PlannedReturnDate</td>
-                    <td>@borrowed.ReturnDate</td>
-                    <td>@borrowed.Charge</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
+<div class="container mt-4">
+    <h3 class="mb-4">My Borrowed Books</h3>
+
+    @if (BorrowedDetails == null)
+    {
+        <div class="alert alert-info" role="alert">
+            <em>Loading...</em>
+        </div>
+    }
+    else if (BorrowedDetails.Count == 0)
+    {
+        <div class="alert alert-warning" role="alert">
+            You have not borrowed any books.
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Book</th>
+                        <th>Borrow Date</th>
+                        <th>Planned Return Date</th>
+                        <th>Return Date</th>
+                        <th>Charge</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var borrowed in BorrowedDetails)
+                    {
+                        <tr>
+                            <td>@borrowed.Book</td>
+                            <td>@borrowed.BorrowDate?.ToString("d")</td>
+                            <td>@borrowed.PlannedReturnDate?.ToString("d")</td>
+                            <td>@borrowed.ReturnDate?.ToString("d")</td>
+                            <td>@string.Format("{0:C}", borrowed.Charge)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
 
 @code {
     private User? UserDetail;
     private List<BorrowedDetail>? BorrowedDetails;
+
     protected override async Task OnInitializedAsync()
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
@@ -52,7 +69,10 @@ else
         {
             var userName = user.Identity.Name;
             UserDetail = await UserService.GetUserByNameAsync(userName);
-            BorrowedDetails = await BorrowedService.GetBorrowedDetailsByUserAsync(UserDetail.Login);
+            if (UserDetail != null)
+            {
+                BorrowedDetails = await BorrowedService.GetBorrowedDetailsByUserAsync(UserDetail.Login);
+            }
         }
     }
 }

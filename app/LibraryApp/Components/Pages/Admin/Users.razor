@@ -7,45 +7,51 @@
 
 <PageTitle>Users</PageTitle>
 
-<h3>Users</h3>
+<div class="container mt-4">
+    <h3 class="mb-4">Users</h3>
 
-@if (users == null)
-{
-    <p><em>Loading...</em></p>
-}
-else if (users.Count == 0)
-{
-    <p>No users found.</p>
-}
-else
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Login</th>
-                <th>Mail</th>
-                <th>User Role</th>
-                <th>Currently Borrowed</th>
-                <th>Returned</th>
-            </tr>
-        </thead>
-        <tbody>
-            @for (int i = 0; i < users.Count; i++)
-            {
-                var user = users[i];
-                var currentlyBorrowed = currentlyBorrowedCounts[user.UserId];
-                var returned = returnedCounts[user.UserId];
-                <tr>
-                    <td>@user.Login</td>
-                    <td>@user.Mail</td>
-                    <td>@user.UserRole</td>
-                    <td>@currentlyBorrowed</td>
-                    <td>@returned</td>
-                </tr>
-            }
-        </tbody>
-</table>
-}
+    @if (users == null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else if (users.Count == 0)
+    {
+        <div class="alert alert-info" role="alert">
+            No users found.
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Login</th>
+                        <th>Mail</th>
+                        <th>User Role</th>
+                        <th>Currently Borrowed</th>
+                        <th>Returned</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < users.Count; i++)
+                    {
+                        var user = users[i];
+                        var currentlyBorrowed = currentlyBorrowedCounts[user.UserId];
+                        var returned = returnedCounts[user.UserId];
+                        <tr>
+                            <td>@user.Login</td>
+                            <td>@user.Mail</td>
+                            <td>@user.UserRole</td>
+                            <td>@currentlyBorrowed</td>
+                            <td>@returned</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
 
 @code {
     private List<User> users;

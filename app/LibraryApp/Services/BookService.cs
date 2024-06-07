@@ -17,6 +17,18 @@ public class BookService : IBookService
         _context = context;
     }
 
+    public async Task<Book> AddBookAsync(Book newBook)
+    {
+        _context.Books.Add(newBook);
+        await _context.SaveChangesAsync();
+        return newBook;
+    }
+
+    public async Task<Book> GetBookByIdAsync(int bookId)
+    {
+        return await _context.Books.SingleOrDefaultAsync(b => b.BookId == bookId);
+    }
+
     public async Task<BookDetail> GetBookDetailAsync(int bookId)
     {
         return await _context.BookDetails.SingleOrDefaultAsync(b => b.BookId == bookId);
@@ -35,5 +47,11 @@ public class BookService : IBookService
         return await _context.BookDetails
                              .FromSqlRaw("CALL find_books(@search_option, @search_crit)", searchOptionParam, searchCritParam)
                              .ToListAsync();
+    }
+
+    public async Task UpdateBookAsync(Book book)
+    {
+        _context.Books.Update(book);
+        await _context.SaveChangesAsync();
     }
 }
